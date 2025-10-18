@@ -107,9 +107,9 @@ export const ChatInput = ({ onSend, isGenerating = false, onStop }: ChatInputPro
         </div>
 
         {/* Helper Text */}
-        <p className="text-xs text-muted-foreground text-center mt-3">
+        {/* <p className="text-xs text-muted-foreground text-center mt-3">
           {isGenerating ? "Generating response..." : "Shift + Enter for new line • Enter to send"}
-        </p>
+        </p> */}
       </form>
     </div>
   );
