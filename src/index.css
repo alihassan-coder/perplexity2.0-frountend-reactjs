@@ -201,7 +201,17 @@ All colors MUST be HSL.
   
   /* Links */
   .prose a {
-    @apply text-primary hover:text-primary/80 underline;
+    @apply text-primary hover:text-primary/80 underline transition-colors duration-200;
+  }
+  
+  .prose a:hover {
+    @apply text-primary/90;
+  }
+  
+  /* Add visual indicator for external links */
+  .prose a[target="_blank"]::after {
+    content: "↗";
+    @apply ml-1 text-xs opacity-70;
   }
   
   /* Horizontal rules */
@@ -242,5 +252,91 @@ All colors MUST be HSL.
   .prose > h3 + *,
   .prose > h4 + * {
     @apply mt-1;
+  }
+  
+  /* Search trail animations */
+  .search-trail-enter {
+    animation: slideInFromTop 0.3s ease-out;
+  }
+  
+  @keyframes slideInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Enhanced gradient backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--secondary) / 0.1));
+  }
+  
+  /* Pulse animation for active elements */
+  .pulse-primary {
+    animation: pulse-primary 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-primary {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  /* Smooth scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+
+  /* Fade in animation for messages */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better focus states */
+  textarea:focus {
+    outline: none;
+  }
+
+  /* Message container smooth transitions */
+  .scroll-smooth {
+    scroll-behavior: smooth;
   }
 }

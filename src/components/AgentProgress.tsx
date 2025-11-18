@@ -1,4 +1,4 @@
-import { Loader2, Search, Brain, CheckCircle, AlertCircle } from 'lucide-react';
+import { Loader2, Search, Brain, CheckCircle, AlertCircle, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AgentStatus } from '@/hooks/useChatStream';
 
@@ -8,7 +8,7 @@ interface AgentProgressProps {
 }
 
 const stageIcons = {
-  initializing: Loader2,
+  initializing: Zap,
   thinking: Brain,
   searching: Search,
   processing: Loader2,
@@ -23,56 +23,77 @@ const stageColors = {
   finalizing: 'text-emerald-500',
 };
 
+const stageLabels = {
+  initializing: 'Initializing',
+  thinking: 'Thinking',
+  searching: 'Searching',
+  processing: 'Processing',
+  finalizing: 'Finalizing',
+};
+
 export const AgentProgress = ({ status, className }: AgentProgressProps) => {
   if (!status) return null;
 
   const Icon = stageIcons[status.stage];
   const colorClass = stageColors[status.stage];
+  const stageLabel = stageLabels[status.stage];
 
   return (
     <div className={cn(
-      "flex items-center gap-3 px-4 py-3 rounded-2xl",
+      "flex flex-col gap-3 px-4 py-3 rounded-2xl",
       "backdrop-blur-xl bg-card/60 border border-border/50",
       "shadow-lg animate-fade-in",
       className
     )}>
-      <div className={cn(
-        "w-8 h-8 rounded-full flex items-center justify-center",
-        "bg-gradient-to-br from-primary/20 to-primary/10",
-        "border border-primary/20"
-      )}>
-        <Icon className={cn("w-4 h-4", colorClass, {
-          "animate-spin": status.stage === 'initializing' || status.stage === 'processing'
-        })} />
-      </div>
-      
-      <div className="flex-1">
-        <p className="text-sm font-medium text-foreground">
-          {status.message}
-        </p>
-        {status.tool && (
-          <p className="text-xs text-muted-foreground mt-1">
-            Using {status.tool}
+      {/* Main Status Row */}
+      <div className="flex items-center gap-3">
+        <div className={cn(
+          "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
+          "bg-gradient-to-br from-primary/20 to-primary/10",
+          "border border-primary/20"
+        )}>
+          <Icon className={cn("w-4 h-4", colorClass, {
+            "animate-spin": status.stage === 'initializing' || status.stage === 'processing'
+          })} />
+        </div>
+        
+        <div className="flex-1">
+          <p className="text-sm font-medium text-foreground">
+            {status.message}
           </p>
-        )}
+          {status.tool && (
+            <p className="text-xs text-muted-foreground mt-1">
+              🔍 Using: <span className="font-mono text-primary">{status.tool}</span>
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Progress indicator */}
-      <div className="flex gap-1">
+      <div className="flex items-center gap-2 px-1">
         {Object.keys(stageIcons).map((stage, index) => {
           const isActive = stage === status.stage;
           const isCompleted = Object.keys(stageIcons).indexOf(status.stage) > index;
           
           return (
-            <div
-              key={stage}
-              className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
-                isActive && "bg-primary scale-125",
-                isCompleted && "bg-primary/60",
-                !isActive && !isCompleted && "bg-muted-foreground/30"
-              )}
-            />
+            <div key={stage} className="flex items-center gap-1.5 flex-1">
+              <div
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  isActive && "bg-primary scale-125",
+                  isCompleted && "bg-primary/60",
+                  !isActive && !isCompleted && "bg-muted-foreground/30"
+                )}
+              />
+              <span className={cn(
+                "text-xs transition-colors duration-300",
+                isActive && "text-primary font-semibold",
+                isCompleted && "text-primary/60",
+                !isActive && !isCompleted && "text-muted-foreground/50"
+              )}>
+                {stageLabel}
+              </span>
+            </div>
           );
         })}
       </div>
