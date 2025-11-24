@@ -1,7 +1,12 @@
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
-export const ThemeToggle = () => {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export const ThemeToggle = ({ className }: ThemeToggleProps) => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -13,7 +18,7 @@ export const ThemeToggle = () => {
   const toggleTheme = () => {
     const root = window.document.documentElement;
     const newTheme = theme === "light" ? "dark" : "light";
-    
+
     root.classList.remove(theme);
     root.classList.add(newTheme);
     setTheme(newTheme);
@@ -22,7 +27,10 @@ export const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-6 right-6 w-12 h-12 rounded-xl backdrop-blur-glass bg-card/60 border border-glass-border hover:shadow-glow-primary transition-all duration-300 flex items-center justify-center group z-50"
+      className={cn(
+        "w-10 h-10 rounded-xl backdrop-blur-glass bg-card/60 border border-glass-border hover:shadow-glow-primary transition-all duration-300 flex items-center justify-center group",
+        className
+      )}
       aria-label="Toggle theme"
     >
       {theme === "light" ? (
